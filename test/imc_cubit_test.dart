@@ -4,12 +4,18 @@ import 'package:calculadora_imc/feature_layer/imc/models/models.dart';
 import 'package:test/test.dart';
 
 void main() {
+  const mockFormValues = FormValues(
+    weight: Weight.dirty('70'),
+    height: Height.dirty('170'),
+  );
   group('ImcCubit', () {
     late ImcCubit imcCubit;
 
     setUp(() {
       imcCubit = ImcCubit();
     });
+
+    tearDown(() => imcCubit.close());
 
     test('initial state is correct', () {
       expect(imcCubit.state, const ImcState.initial());
@@ -19,10 +25,12 @@ void main() {
       blocTest<ImcCubit, ImcState>(
         'emits correct state when weight is changed',
         build: () => imcCubit,
-        act: (cubit) => cubit.onWeightChanged('70'),
+        seed: () => const ImcState(formValues: mockFormValues),
+        act: (cubit) => cubit.onWeightChanged('50'),
         expect: () => [
-          imcCubit.state
-              .copyWith(weight: const Weight.dirty('70'), isValid: false),
+          imcCubit.state.copyWith(
+              formValues:
+                  mockFormValues.copyWith(weight: const Weight.dirty('50'))),
         ],
       );
     });
@@ -31,10 +39,12 @@ void main() {
       blocTest<ImcCubit, ImcState>(
         'emits correct state when height is changed',
         build: () => imcCubit,
-        act: (cubit) => cubit.onHeightChanged('170'),
+        seed: () => const ImcState(formValues: mockFormValues),
+        act: (cubit) => cubit.onHeightChanged('150'),
         expect: () => [
-          imcCubit.state
-              .copyWith(height: const Height.dirty('170'), isValid: false),
+          imcCubit.state.copyWith(
+              formValues:
+                  mockFormValues.copyWith(height: const Height.dirty('150'))),
         ],
       );
     });
@@ -43,11 +53,7 @@ void main() {
       blocTest<ImcCubit, ImcState>(
         'emits correct state when calculate button is pressed with valid input',
         build: () => imcCubit,
-        seed: () => imcCubit.state.copyWith(
-          weight: const Weight.dirty('70'),
-          height: const Height.dirty('170'),
-          isValid: true,
-        ),
+        seed: () => const ImcState(formValues: mockFormValues),
         act: (cubit) => cubit.onCalculatePressed(),
         expect: () => [
           imcCubit.state.copyWith(
@@ -59,11 +65,8 @@ void main() {
       blocTest<ImcCubit, ImcState>(
         'emits correct state when calculate button is pressed with invalid input',
         build: () => imcCubit,
-        seed: () => imcCubit.state.copyWith(
-          weight: const Weight.dirty('70'),
-          height: const Height.dirty('170'),
-          isValid: false,
-        ),
+        seed: () =>
+            const ImcState(formValues: FormValues(weight: Weight.dirty('70'))),
         act: (cubit) => cubit.onCalculatePressed(),
         expect: () => [],
       );

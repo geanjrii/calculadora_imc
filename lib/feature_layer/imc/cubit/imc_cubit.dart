@@ -10,21 +10,23 @@ final class ImcCubit extends Cubit<ImcState> {
   ImcCubit() : super(const ImcState.initial());
 
   void onWeightChanged(String value) {
-    final weight = Weight.dirty(value);
-    final isValid = Formz.validate([weight, state.height]);
-    emit(state.copyWith(weight: weight, isValid: isValid));
+    emit(state.copyWith(
+        formValues: state.formValues.copyWith(
+      weight: Weight.dirty(value),
+    )));
   }
 
   void onHeightChanged(String value) {
-    final height = Height.dirty(value);
-    final isValid = Formz.validate([state.weight, height]);
-    emit(state.copyWith(height: height, isValid: isValid));
+    emit(state.copyWith(
+        formValues: state.formValues.copyWith(
+      height: Height.dirty(value),
+    )));
   }
 
   void onCalculatePressed() {
-    if (state.isValid) {
-      final weight = state.weight.value;
-      final height = state.height.value;
+    if (state.formValues.isValid) {
+      final weight = state.formValues.weight.value;
+      final height = state.formValues.height.value;
       final result = _calculateImc(weight: weight, height: height);
       emit(state.copyWith(result: result));
     }
@@ -55,3 +57,5 @@ final class ImcCubit extends Cubit<ImcState> {
     return '$result (${imc.toStringAsFixed(2)})';
   }
 }
+
+

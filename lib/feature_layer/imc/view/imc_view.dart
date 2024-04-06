@@ -61,7 +61,7 @@ class HomeViewState extends State<HomeView> {
               HeightTextField(
                 customColor: customColor,
                 onChanged: imcCubit.onHeightChanged,
-                height: state.height,
+                height: state.formValues.height,
               ),
               const SizedBox(
                 height: 20,
@@ -69,7 +69,7 @@ class HomeViewState extends State<HomeView> {
               WeightTextField(
                 customColor: customColor,
                 onChanged: imcCubit.onWeightChanged,
-                weight: state.weight,
+                weight: state.formValues.weight,
               ),
               CalculateButton(
                 customColor: customColor,

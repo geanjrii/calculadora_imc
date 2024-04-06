@@ -2,41 +2,29 @@ part of 'imc_cubit.dart';
 
 final class ImcState extends Equatable {
   final String result;
-  final Weight weight;
-  final Height height;
-  final FormzSubmissionStatus status;
-  final bool isValid;
+  final FormValues formValues;
 
-  const ImcState._({
+  const ImcState({
     this.result = 'Informe os teus dados!',
-    this.weight = const Weight.pure(),
-    this.height = const Height.pure(),
-    this.status = FormzSubmissionStatus.initial,
-    this.isValid = false,
+    this.formValues = const FormValues(),
   });
 
-  const ImcState.initial() : this._();
+  const ImcState.initial() : this();
 
   ImcState copyWith({
     String? result,
-    Weight? weight,
-    Height? height,
+    FormValues? formValues,
     FormzSubmissionStatus? status,
-    bool? isValid,
   }) {
-    return ImcState._(
+    return ImcState(
       result: result ?? this.result,
-      weight: weight ?? this.weight,
-      height: height ?? this.height,
-      status: status ?? this.status,
-      isValid: isValid ?? this.isValid,
+      formValues: formValues ?? this.formValues,
     );
   }
 
   @override
-  String toString() =>
-      'ImcState { result: $result, weight: $weight, height: $height , status: $status}';
+  String toString() => 'ImcState { result: $result, formValues: $formValues  }';
 
   @override
-  List<Object> get props => [result, weight, height, status, isValid];
+  List<Object> get props => [result, formValues];
 }

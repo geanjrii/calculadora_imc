@@ -1,6 +1,5 @@
 import 'package:calculadora_imc/feature_layer/imc/cubit/imc_cubit.dart';
 import 'package:calculadora_imc/feature_layer/imc/models/models.dart';
-import 'package:formz/formz.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -9,17 +8,16 @@ void main() {
       const state = ImcState.initial();
       final newState = state.copyWith(
         result: 'Peso ideal (24.22)',
-        weight: const Weight.dirty('70'),
-        height: const Height.dirty('170'),
-        status: FormzSubmissionStatus.success,
-        isValid: true,
+        formValues: const FormValues(
+          weight: Weight.dirty('70'),
+          height: Height.dirty('170'),
+        ),
       );
 
       expect(newState.result, 'Peso ideal (24.22)');
-      expect(newState.weight.value, '70');
-      expect(newState.height.value, '170');
-      expect(newState.status, FormzSubmissionStatus.success);
-      expect(newState.isValid, true);
+      expect(newState.formValues.weight.value, '70');
+      expect(newState.formValues.height.value, '170');
+      expect(newState.formValues.isValid, true);
     });
 
     test('equality comparison works correctly', () {
@@ -34,7 +32,7 @@ void main() {
     test('props list contains all the correct properties', () {
       const state = ImcState.initial();
 
-      expect(state.props, [state.result, state.weight, state.height, state.status, state.isValid]);
+      expect(state.props, [state.result, state.formValues]);
     });
   });
 }
